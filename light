@@ -1,0 +1,42 @@
+<html><head>
+<meta name="viewport" content="width=300">
+<script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+<script type='text/javascript'>
+
+function pos (ev,t,c) {
+  var val=Math.round((((ev.pageX - t.offsetLeft) * 255) / t.clientWidth));
+  t.innerHTML=" :: " + val;
+  $.post("/set",''+val+c);
+}
+function set(r,g,b) {
+  $.post("/set",''+r+'r'+g+'g'+b+'b')
+}
+</script>
+</head>
+<body>
+<h1>Light control</h1>
+<div id='red' style='height: 2em; width: 100%; border: 1px solid black; '
+  onclick="pos(event,this,'r');">
+  Text
+</div>
+<div id='green' style='height: 2em; width: 100%; border: 1px solid black; '
+  onclick="pos(event,this,'g');">
+  Text
+</div>
+<div id='blue' style='height: 2em; width: 100%; border: 1px solid black; '
+  onclick="pos(event,this,'b');">
+  Text
+</div>
+<div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: black; border: 1px solid black;' onclick="set(0,0,0);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: red;
+  border: 1px solid black;' onclick="set(255,0,0);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: green; border: 1px solid black;' onclick="set(0,255,0);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: blue; border: 1px solid black;' onclick="set(0,0,255);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: yellow; border: 1px solid black;' onclick="set(255,255,0);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: cyan; border: 1px solid black;' onclick="set(0,255,255);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: magenta; border: 1px solid black;' onclick="set(255,0,255);"></div>
+<div style='display: inline-block; height: 2em; width: 12%; background-color: white; border: 1px solid black;' onclick="set(255,255,255);"></div>
+  </div>
+</body></html>
+
