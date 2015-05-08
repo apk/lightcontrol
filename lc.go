@@ -11,10 +11,11 @@ import (
 
 func compute(ch chan string) {
 
-	re := regexp.MustCompile("^(\\d+)([rgb])(.*)$")
+	re := regexp.MustCompile("^(\\d+)([rgbs])(.*)$")
 	r := "0"
 	g := "0"
 	b := "0"
+	t := "0"
 	for {
 		s := <- ch
 
@@ -30,10 +31,12 @@ func compute(ch chan string) {
 				g = a[1]
 			case "b": 
 				b = a[1]
+			case "s":
+				t = a[1]
 			}
 			s=a[3]
 		}
-		fmt.Printf(",%s,%s,%s.\n", r, g, b)
+		fmt.Printf("%s,%s,%s,%s.\n", t, r, g, b)
 	}
 }
 
