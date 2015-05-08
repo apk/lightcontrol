@@ -8,35 +8,57 @@ function pos (ev,t,c) {
   t.innerHTML=" :: " + val;
   $.post("/set",''+val+c);
 }
-function set(r,g,b) {
-  $.post("/set",''+r+'r'+g+'g'+b+'b')
+function set(v) {
+  $.post("/set",v)
 }
 </script>
+<style type="text/css">
+.but {
+height: 2.5em;
+border: 1px solid black;
+border-radius: 1.2em;
+}
+</style>
 </head>
 <body>
 <h1>Light control</h1>
-<div id='red' style='height: 2em; width: 100%; border: 1px solid black; '
-  onclick="pos(event,this,'r');">
-  Text
-</div>
-<div id='green' style='height: 2em; width: 100%; border: 1px solid black; '
-  onclick="pos(event,this,'g');">
-  Text
-</div>
-<div id='blue' style='height: 2em; width: 100%; border: 1px solid black; '
-  onclick="pos(event,this,'b');">
-  Text
-</div>
-<div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: black; border: 1px solid black;' onclick="set(0,0,0);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: red;
-  border: 1px solid black;' onclick="set(255,0,0);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: green; border: 1px solid black;' onclick="set(0,255,0);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: blue; border: 1px solid black;' onclick="set(0,0,255);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: yellow; border: 1px solid black;' onclick="set(255,255,0);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: cyan; border: 1px solid black;' onclick="set(0,255,255);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: magenta; border: 1px solid black;' onclick="set(255,0,255);"></div>
-<div style='display: inline-block; height: 2em; width: 12%; background-color: white; border: 1px solid black;' onclick="set(255,255,255);"></div>
-  </div>
+<table style='width: 100%; '>
+<tr>
+<td class='but' style='background-color: #000000; ' onclick='set("0r");'></td>
+<td class='but' style='background-color: #400000; ' onclick='set("64r");'></td>
+<td class='but' style='background-color: #800000; ' onclick='set("128r");'></td>
+<td class='but' style='background-color: #ff0000; ' onclick='set("255r");'></td>
+</tr><tr>
+<td class='but' id='red' style='background-color: #ff8080; ' colspan='4' onclick="pos(event,this,'r');">Text</td>
+</tr><tr>
+<td class='but' style='background-color: #000000; ' onclick='set("0g");'></td>
+<td class='but' style='background-color: #004000; ' onclick='set("64g");'></td>
+<td class='but' style='background-color: #008000; ' onclick='set("128g");'></td>
+<td class='but' style='background-color: #00ff00; ' onclick='set("255g");'></td>
+</tr><tr>
+<td class='but' id='green' style='background-color: #80ff80; ' colspan='4' onclick="pos(event,this,'g');">Text</td>
+</tr><tr>
+<td class='but' style='background-color: #000000; ' onclick='set("0b");'></td>
+<td class='but' style='background-color: #000040; ' onclick='set("64b");'></td>
+<td class='but' style='background-color: #000080; ' onclick='set("128b");'></td>
+<td class='but' style='background-color: #0000ff; ' onclick='set("255b");'></td>
+</tr><tr>
+<td class='but' id='blue' style='background-color: #8080ff; ' colspan='4' onclick="pos(event,this,'b');">Text</td>
+</tr><tr>
+<td class='but' style='background-color: black; ' onclick='set("0r0g0b");'></td>
+<td class='but' style='background-color: red; ' onclick='set("255r0g0b");'></td>
+<td class='but' style='background-color: green; ' onclick='set("0r255g0b");'></td>
+<td class='but' style='background-color: blue; ' onclick='set("0r0g255b");'></td>
+</tr><tr>
+<td class='but' style='background-color: white; ' onclick='set("255r255g255b");'></td>
+<td class='but' style='background-color: cyan; ' onclick='set("0r255g255b");'></td>
+<td class='but' style='background-color: magenta; ' onclick='set("255r0g255b");'></td>
+<td class='but' style='background-color: yellow; ' onclick='set("255r255g0b");'></td>
+</tr><tr>
+<td class='but' style='background-color: gray; ' onclick='set("0s");'></td>
+<td class='but' style='background-color: gray; ' onclick='set("1s");'></td>
+<td class='but' style='background-color: gray; ' onclick='set("2s");'></td>
+<td class='but' style='background-color: gray; ' onclick='set("3s");'></td>
+  </tr></table>
 </body></html>
 
