@@ -9,7 +9,12 @@ import (
 	"io/ioutil"
 )
 
-func compute(ch chan string) {
+type req struct {
+	s string
+	ch chan string
+}
+
+func compute(ch chan req) {
 
 	re := regexp.MustCompile("^(\\d+)([rgbs])(.*)$")
 	r := "0"
@@ -17,7 +22,8 @@ func compute(ch chan string) {
 	b := "0"
 	t := "0"
 	for {
-		s := <- ch
+		rq := <- ch
+		s := rq.s
 
 		for {
 			a := re.FindStringSubmatch(s)
@@ -36,14 +42,16 @@ func compute(ch chan string) {
 			}
 			s=a[3]
 		}
-		fmt.Printf("%s,%s,%s,%s.\n", t, r, g, b)
+		rp := fmt.Sprintf("%s,%s,%s,%s", t, r, g, b)
+		fmt.Printf("%s.\n", rp)
+		rq.ch <- rp
 	}
 }
 
 
 func main () {
 
-	ch := make(chan string)
+	ch := make(chan req)
 
 	go compute(ch)
 
@@ -56,7 +64,10 @@ func main () {
 	http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(r.Body)
 		if err == nil {
-			ch <- string(body)
+			rc := make(chan string)
+			ch <- req{s: string(body), ch: rc}
+			s := <- rc
+			w.Write([]byte(s))
 		}
 
 	})

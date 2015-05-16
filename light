@@ -5,18 +5,63 @@
 
 function pos (ev,t,c) {
   var val=Math.round((((ev.pageX - t.offsetLeft) * 255) / t.clientWidth));
-  t.innerHTML=" :: " + val;
-  $.post("/set",''+val+c);
+  set(''+val+c);
 }
+function hex(x) {
+  var r = x.toString(16)
+  if (r.length < 2) {
+    r = "0"+ r;
+  }
+  return r;
+}
+
+function mkcol(r,g,b) {
+  return "#"+hex(r)+hex(g)+hex(b);
+}
+
+function up(i,r,g,b) {
+  $("#"+i).css('background-color',mkcol(r,g,b));
+}
+
+function us(i,r,g,b,y,u,v) {
+  $("#"+i).css('background','linear-gradient(to right,'+mkcol(r,g,b)+","+mkcol(y,u,v)+')');
+}
+
 function set(v) {
-  $.post("/set",v)
+  $.post("/set",v,function(data) {
+    var a = data.split(",")
+    var r = parseInt(a[1])
+    var g = parseInt(a[2])
+    var b = parseInt(a[3])
+    $('body').css('background-color',mkcol(r,g,b));
+    up('r0',0,g,b)
+    up('r64',64,g,b)
+    up('r128',128,g,b)
+    up('r255',255,g,b)
+    up('g0',r,0,b)
+    up('g64',r,64,b)
+    up('g128',r,128,b)
+    up('g255',r,255,b)
+    up('b0',r,g,0)
+    up('b64',r,g,64)
+    up('b128',r,g,128)
+    up('b255',r,g,255)
+    us('red',0,g,b,255,g,b)
+    us('green',r,0,b,r,255,b)
+    us('blue',r,g,0,r,g,255)
+  });
 }
 </script>
 <style type="text/css">
 .but {
-height: 2.5em;
-border: 1px solid black;
-border-radius: 1.2em;
+  height: 2.5em;
+  border: 1px solid black;
+  border-radius: 1em;
+}
+.slide {
+  height: 2.5em;
+  border: 1px solid black;
+  border-radius: 0;
 }
 </style>
 </head>
@@ -24,26 +69,26 @@ border-radius: 1.2em;
 <h1>Light control</h1>
 <table style='width: 100%; '>
 <tr>
-<td class='but' style='background-color: #000000; ' onclick='set("0r");'></td>
-<td class='but' style='background-color: #400000; ' onclick='set("64r");'></td>
-<td class='but' style='background-color: #800000; ' onclick='set("128r");'></td>
-<td class='but' style='background-color: #ff0000; ' onclick='set("255r");'></td>
+<td class='but' id='r0' style='background-color: #000000; ' onclick='set("0r");'></td>
+<td class='but' id='r64' style='background-color: #400000; ' onclick='set("64r");'></td>
+<td class='but' id='r128' style='background-color: #800000; ' onclick='set("128r");'></td>
+<td class='but' id='r255' style='background-color: #ff0000; ' onclick='set("255r");'></td>
 </tr><tr>
-<td class='but' id='red' style='background-color: #ff8080; ' colspan='4' onclick="pos(event,this,'r');">Text</td>
+<td class='slide' id='red' style='background: linear-gradient(left,black,red); ' colspan='4' onclick="pos(event,this,'r');"></td>
 </tr><tr>
-<td class='but' style='background-color: #000000; ' onclick='set("0g");'></td>
-<td class='but' style='background-color: #004000; ' onclick='set("64g");'></td>
-<td class='but' style='background-color: #008000; ' onclick='set("128g");'></td>
-<td class='but' style='background-color: #00ff00; ' onclick='set("255g");'></td>
+<td class='but' id='g0' style='background-color: #000000; ' onclick='set("0g");'></td>
+<td class='but' id='g64' style='background-color: #004000; ' onclick='set("64g");'></td>
+<td class='but' id='g128' style='background-color: #008000; ' onclick='set("128g");'></td>
+<td class='but' id='g255' style='background-color: #00ff00; ' onclick='set("255g");'></td>
 </tr><tr>
-<td class='but' id='green' style='background-color: #80ff80; ' colspan='4' onclick="pos(event,this,'g');">Text</td>
+<td class='slide' id='green' style='background-color: #80ff80; ' colspan='4' onclick="pos(event,this,'g');"></td>
 </tr><tr>
-<td class='but' style='background-color: #000000; ' onclick='set("0b");'></td>
-<td class='but' style='background-color: #000040; ' onclick='set("64b");'></td>
-<td class='but' style='background-color: #000080; ' onclick='set("128b");'></td>
-<td class='but' style='background-color: #0000ff; ' onclick='set("255b");'></td>
+<td class='but' id='b0' style='background-color: #000000; ' onclick='set("0b");'></td>
+<td class='but' id='b64' style='background-color: #000040; ' onclick='set("64b");'></td>
+<td class='but' id='b128' style='background-color: #000080; ' onclick='set("128b");'></td>
+<td class='but' id='b255' style='background-color: #0000ff; ' onclick='set("255b");'></td>
 </tr><tr>
-<td class='but' id='blue' style='background-color: #8080ff; ' colspan='4' onclick="pos(event,this,'b');">Text</td>
+<td class='slide' id='blue' style='background-color: #8080ff; ' colspan='4' onclick="pos(event,this,'b');"></td>
 </tr><tr>
 <td class='but' style='background-color: black; ' onclick='set("0r0g0b");'></td>
 <td class='but' style='background-color: red; ' onclick='set("255r0g0b");'></td>
@@ -60,5 +105,9 @@ border-radius: 1.2em;
 <td class='but' style='background-color: gray; ' onclick='set("2s");'></td>
 <td class='but' style='background-color: gray; ' onclick='set("3s");'></td>
   </tr></table>
-</body></html>
+</body>
+<script type='text/javascript'>
+set('')
+</script>
+</html>
 
